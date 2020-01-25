@@ -4,8 +4,19 @@ class Post < ActiveRecord::Base
   before_validation :make_title_case 
   belongs_to :author
 
-  #put new code here
+  # filtering  for multiple post instances from the database
+  def self.by_author(author_id)
+    where(author: author_id)
+  end
 
+  # Filtering for recent or old
+  def self.from_today
+    where("created_at >=?", Time.zone.today.beginning_of_day)
+  end
+
+  def self.old_news
+    where("created_at <?", Time.zone.today.beginning_of_day)
+  end
   private
 
   def is_title_case
